@@ -1,0 +1,19 @@
+language: node_js
+node_js:
+  - 12
+
+before_install:
+- cd functions
+- npm update
+
+install:
+- npm install
+
+script:
+- npm test
+
+deploy:
+  if: branch = master
+  provider: firebase
+  token:
+    secure: $FIREBASE_TOKEN
