@@ -1,19 +1,16 @@
 language: node_js
 node_js:
   - 12
-
 before_install:
-- cd functions
-- npm update
-
+  - npm update
+  - npm install -g firebase-tools
 install:
-- npm install
-
+  - npm --prefix functions install
 script:
-- npm test
-
+  - npm --prefix functions test
 deploy:
-  if: branch = master
   provider: firebase
   token:
-    secure: $FIREBASE_TOKEN
+    secure: "zXDzoiLj5iikJ+HROQZgLTQ1TqSws3QkQrhD10CMrifYzVFb2RrOBGaAq1MYKXgDmXqQhkIai+bdfZ//9jCOBfzDD8e38iJZHrFBKxtjT79C70GQmp3Ozg15pJcnWbINyP5omay3Zj/XpHsxyg96quJ/ahnvJLCd4Z1yOaEh0C8aMQV6rMX/Bf7XlP1FRPoyL+dQc5lZGDyT80CRhpKy/qzd6UCQWWr7ZgRuQOJWJ1EhGAT3V8Pby7T/Zd1aMCUco5K0dfnzKDVmRMvLxp5OQfR+HWa6rR1ywC4kTUm6junQQgR4MSmj4AU9G9JkVyRCuew8oPBS4jnwBI5loJN9+EqsxQnk2KzmhW7Qds3XBXd0ZS5+Ac2s2C/hw6TUmMTFizRQQnlOs/ZFaldW8wBJVanTMRntR0f0oS7SIM17dqc3aS/38Bk7RP+oFazQRc6sS1JCzZSOvLTxP/ZhYN0/YXEnMsOcIp4C8j8GO3+dtiTgafODS5RWcb1pbZhJDkuEl4cZ/ntnf7F+SLbnslzuB14oxDXpqhrEyyVr1vYrw25hLlq41g9ImJWLqHf6pRAcwmb/YIo2InAISZyxCVIxDawbGmgYpCwNS3XHBVi6V0r4/ISCNv+ns9X749LskvXQ+ySDkCWne0UmaL1BB61QjTC2BkAmwxlMlLogg6E/6Ls="
+  on:
+    branch: main

@@ -3,14 +3,10 @@ const admin = require('firebase-admin');
 const express = require('express');
 const cors = require('cors');
 const app = express();
-var serviceAccount = require("./permissions.json");
 var jsonValidation = require("./jsonSchema");
-const { firestore } = require('firebase-admin');
-const fs = require('fs');
 
 app.use(cors({ origin: true }));
 admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount),
     databaseURL: "https://fir-api-9a206..firebaseio.com",
     storageBucket: "gs://imagerepository-b7a29.appspot.com"
 });
@@ -31,6 +27,7 @@ app.get('/api/search/images/:keywords', (req, res) => {
                 querySnapshot.forEach(documentSnapshot => {
                     response.push(documentSnapshot.data());
                 })
+                return;
             })
             return res.status(200).send(response);
         } catch (error) {
@@ -52,6 +49,7 @@ app.get('/api/search/images/colors/:colors', (req, res) => {
                 querySnapshot.forEach(documentSnapshot => {
                     response.push(documentSnapshot.data());
                 })
+                return;
             })
             return res.status(200).send(response);
         } catch (error) {
@@ -73,6 +71,7 @@ app.get('/api/search/images/photographerName/:photographerName', (req, res) => {
                 querySnapshot.forEach(documentSnapshot => {
                     response.push(documentSnapshot.data());
                 })
+                return;
             })
             return res.status(200).send(response);
         } catch (error) {
@@ -97,7 +96,9 @@ app.get('/api/search/images/similarImage/:similarImage', (req, res) => {
                     snapshot.forEach(snapshotValue => {
                         response.push(snapshotValue.data())
                     })
-                })               
+                    return;
+                }) 
+                return;              
             })
             return res.status(200).send(response);
         } catch (error) {
