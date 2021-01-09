@@ -23,14 +23,14 @@ app.get('/api/images/', (req, res) => {
             var numberOfQueryParamters = Object.keys(req.query).length
             var response = []
             //If no query paramters are passed, return all images
-            if (numberOfQueryParamters == 0) {
-                response = await getAllImages();
+            if (numberOfQueryParamters === 0) {
+                response = getAllImages();
             } else { //If there's at least one query paramter
                 for (var i = 0; i < Object.keys(req.query).length; i++) {
                     var queryParamter = Object.keys(req.query)[i]
-                    if (queryParamter == "colors" || queryParamter == "keywords") {
+                    if (queryParamter === "colors" || queryParamter === "keywords") {
                         response = await filterResponseByColorOrKeywords(queryParamter, req.query, response)
-                    } else if (queryParamter == "photographerName") {
+                    } else if (queryParamter === "photographerName") {
                         response = await filterResponseByPhotographerName(req.query, response)
                     } else {
                         response = await filterResponseBySimilarImage(req)
@@ -69,7 +69,7 @@ async function filterResponseBySimilarImage(request) {
 
 async function filterResponseByPhotographerName(query, response) {
     var result = []
-    if (response.length == 0) {
+    if (response.length === 0) {
         await db.collection('images')
             .where("photographerName", "==", query.photographerName)
             .get()
@@ -82,7 +82,7 @@ async function filterResponseByPhotographerName(query, response) {
     } else {
         for (var i = 0; i < response.length; i++) {
             var image = response[i]
-            if (image.photographerName == query.photographerName) {
+            if (image.photographerName === query.photographerName) {
                 result.push(image);
             }
         }
@@ -94,8 +94,8 @@ async function filterResponseByPhotographerName(query, response) {
 
 async function filterResponseByColorOrKeywords(queryParamter, query, response) {
     var result = []
-    if (queryParamter == "colors") {
-        if (response.length == 0) {
+    if (queryParamter === "colors") {
+        if (response.length === 0) {
             await db.collection('images')
                 .where("colors", "array-contains-any", JSON.parse(query.colors))
                 .get()
@@ -114,7 +114,7 @@ async function filterResponseByColorOrKeywords(queryParamter, query, response) {
             }
         }
     } else {
-        if (response.length == 0) {
+        if (response.length === 0) {
             await db.collection('images')
                 .where("keywords", "array-contains-any", JSON.parse(query.keywords))
                 .get()
@@ -125,10 +125,10 @@ async function filterResponseByColorOrKeywords(queryParamter, query, response) {
                     return;
                 })
         } else {
-            for (var i = 0; i < response.length; i++) {
-                var image = response[i]
-                if (image.keywords.some(keyword => query.keywords.indexOf(keyword) >= 0)) {
-                    result.push(image);
+            for (var j = 0; j < response.length; j++) {
+                var img = response[j]
+                if (img.keywords.some(keyword => query.keywords.indexOf(keyword) >= 0)) {
+                    result.push(img);
                 }
             }
         }
