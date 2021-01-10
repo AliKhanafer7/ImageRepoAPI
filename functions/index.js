@@ -24,7 +24,7 @@ app.get('/api/images/', (req, res) => {
             var response = []
             //If no query paramters are passed, return all images
             if (numberOfQueryParamters === 0) {
-                response = getAllImages();
+                response = await getAllImages();
             } else { //If there's at least one query paramter
                 for (var i = 0; i < Object.keys(req.query).length; i++) {
                     var queryParamter = Object.keys(req.query)[i]
@@ -58,7 +58,12 @@ async function filterResponseBySimilarImage(request) {
                 .get()
                 .then(snapshot => {
                     snapshot.forEach(snapshotValue => {
-                        result.push(snapshotValue.data())
+                        var documentSnapshotWithId = 
+                        {
+                            ...snapshotValue.data(),
+                            id: snapshotValue.id
+                        }
+                        result.push(documentSnapshotWithId)
                     })
                     return;
                 })
@@ -75,7 +80,12 @@ async function filterResponseByPhotographerName(query, response) {
             .get()
             .then(querySnapshot => {
                 querySnapshot.forEach(documentSnapshot => {
-                    result.push(documentSnapshot.data());
+                    var documentSnapshotWithId = 
+                    {
+                        ...documentSnapshot.data(),
+                        id: documentSnapshot.id
+                    }
+                    result.push(documentSnapshotWithId);
                 })
                 return;
             })
@@ -101,7 +111,12 @@ async function filterResponseByColorOrKeywords(queryParamter, query, response) {
                 .get()
                 .then(querySnapshot => {
                     querySnapshot.forEach(documentSnapshot => {
-                        result.push(documentSnapshot.data());
+                        var documentSnapshotWithId = 
+                        {
+                            ...documentSnapshot.data(),
+                            id: documentSnapshot.id
+                        }
+                        result.push(documentSnapshotWithId);
                     })
                     return;
                 })
@@ -120,7 +135,12 @@ async function filterResponseByColorOrKeywords(queryParamter, query, response) {
                 .get()
                 .then(querySnapshot => {
                     querySnapshot.forEach(documentSnapshot => {
-                        result.push(documentSnapshot.data());
+                        var documentSnapshotWithId = 
+                        {
+                            ...documentSnapshot.data(),
+                            id: documentSnapshot.id
+                        }
+                        result.push(documentSnapshotWithId);
                     })
                     return;
                 })
@@ -143,7 +163,12 @@ async function getAllImages() {
         .get()
         .then(querySnapshot => {
             querySnapshot.forEach(documentSnapshot => {
-                response.push(documentSnapshot.data());
+                var documentSnapshotWithId = 
+                {
+                    ...documentSnapshot.data(),
+                    id: documentSnapshot.id
+                }
+                response.push(documentSnapshotWithId);
             })
             return;
         })
