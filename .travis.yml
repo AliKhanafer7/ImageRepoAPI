@@ -13,7 +13,7 @@ before_script:
 script:
   - npm --prefix functions test
 before_deploy:
-  - env -u $GOOGLE_APPLICATION_CREDENTIALS
+  - env -u GOOGLE_APPLICATION_CREDENTIALS
 deploy:
   provider: firebase
   token:
