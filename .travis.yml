@@ -13,7 +13,7 @@ before_script:
 script:
   - npm --prefix functions test
 before_deploy:
-  - export GOOGLE_APPLICATION_CREDENTIALS=./functions/permissions.json
+  - env -u $GOOGLE_APPLICATION_CREDENTIALS
 deploy:
   provider: firebase
   token:
