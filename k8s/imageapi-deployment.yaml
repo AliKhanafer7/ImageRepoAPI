@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: image-repo-api-deployment
+  labels:
+    app: image-repo-api
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: image-repo-api
+  template:
+    metadata:
+      labels:
+        app: image-repo-api
+    spec:
+      containers:
+      - name: image-repo-api
+        image: us.gcr.io/imagerepository-b7a29
+        ports:
+        - containerPort: 80
