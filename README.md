@@ -17,6 +17,7 @@ A quick thank you to Shopify for giving us this opportunity to showcase our skil
     * [One Paramter](#One-Paramter)
     * [Multiple Paramters](#Multiple-Paramters)
     * [Similar Images](#Similar-Images)
+* [Deploying Locally](#Deploying-Locally)
 * [CI/CD](#CI/CD)
 
 * [Contributing](#Contributing)
@@ -35,7 +36,8 @@ This project contains all my code for searching through an image repository base
 * Travis CI for __CI/CD__
 
 ## Prerequisites
-* Your preferred method of making API calls. I suggest __Postman__ and it's what I'll be using for the examples.
+* Your preferred method of making API calls. I suggest __Postman__.
+* __Minikube__ and __kubectl__ if you plan on deploying to a local cluster
 
 ## API Query Parameters
 __Endpoint URI__: https://us-central1-imagerepository-b7a29.cloudfunctions.net/app/api/images
@@ -70,6 +72,16 @@ GET /api/images?keywords=["mountains","cold"]&colors=["white","green"]&photograp
 GET /api/images?similarImage=RvOcFSmEVOU
 ```
 
+## Deploying Locally
+In the `k8s` folder, you'll find a deployment manifest that defines a Kubernetes `deployment` that watches over 3 `imageRepoAPI pods`.
+
+If you wanna deploy this to your local minikube cluster, you can do so by running:
+```
+kubectl apply -f k8s/imageapi-deployment.yaml
+```
+
+Unfortunately, the pods will fail to run with an `ImagePullBackOff` error, since you don't have a service account with an `imagePullSecret` defined. You need one to pull from my Google Cloud Registery. But I included this to show what kind of experience I have with k8s
+
 ## CI/CD
 ![piepline](diagrams/pipeline.png)
 
@@ -86,4 +98,15 @@ Afterwards, amend your comit:
 ```
 git commit --amend
 ```
-and make sure your commit follows the [conventional commit](https://www.conventionalcommits.org/en/v1.0.0/) guidlines
+and make sure your commit follows the following format guidlines:
+```
+<commit subject>
+
+<further details>
+```
+Example:
+```
+Remove path parameters and add query parameters
+
+Now, instead of having an endpoint for all the different characteristics of a picture, there's one endpoint that filters based on different query parameters
+```
