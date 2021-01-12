@@ -3,7 +3,6 @@ const admin = require('firebase-admin');
 const express = require('express');
 const cors = require('cors');
 const app = express();
-var jsonValidation = require("./jsonSchema");
 const { query } = require('express');
 
 app.use(cors({ origin: true }));
@@ -32,14 +31,15 @@ app.get('/api/images/', (req, res) => {
                         response = await filterResponseByColorOrKeywords(queryParamter, req.query, response)
                     } else if (queryParamter === "photographerName") {
                         response = await filterResponseByPhotographerName(req.query, response)
-                    } else {
+                    } else if (queryParamter === "similarImage"){
                         response = await filterResponseBySimilarImage(req)
                     }
                 }
             }
 
-
-
+            if(response.length === 0){
+                response.push("No results were found. Either narrow down your search criteria or make sure your query parameters are correctly spelled")
+            }
             return res.status(200).send(response);
         } catch (error) {
             console.log(error)
@@ -175,39 +175,6 @@ async function getAllImages() {
 
     return response
 }
-
-// adds an image to the repository
-app.post('/api/images', (req, res) => {
-    (async () => {
-        try {
-            //Validate JSON
-            jsonValidation(req.body)
-
-            //Add image metadata to firestore
-            await db.collection('images').doc('/' + req.body.imageName + '/')
-                .create({ image: req.body });
-
-
-            //Add actual image to cloud storage
-            await bucket.upload("/Users/alikhanafer/Desktop/testimage.png", {
-                // Support for HTTP requests made with `Accept-Encoding: gzip`
-                gzip: true,
-                // By setting the option `destination`, you can change the name of the
-                // object you are uploading to a bucket.
-                metadata: {
-                    // Enable long-lived HTTP caching headers
-                    // Use only if the contents of the file will never change
-                    // (If the contents will change, use cacheControl: 'no-cache')
-                    cacheControl: 'public, max-age=31536000',
-                },
-            })
-            return res.status(200).send();
-        } catch (error) {
-            console.log(error)
-            return res.status(400).send(error.errors[0].stack);
-        }
-    })();
-});
 
 
 exports.app = functions.https.onRequest(app);
