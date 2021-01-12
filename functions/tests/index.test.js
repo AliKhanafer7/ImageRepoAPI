@@ -50,4 +50,11 @@ describe('Get Endpoints', () => {
         expect(res.statusCode).toEqual(200)
         expect(res.body).toEqual(similarImage.response)
     })
+
+    it('Should return a message saying no results were found', async () => {
+        const res = await request(app.app)
+            .get('/api/images?similarImages=RvOcFSmEVOU')
+        expect(res.statusCode).toEqual(200)
+        expect(res.body).toEqual(["No results were found. Either narrow down your search criteria or make sure your query parameters are correctly spelled"])
+    })
 })
